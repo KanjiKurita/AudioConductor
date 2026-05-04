@@ -15,8 +15,7 @@ namespace AudioConductor.Editor.Core.Tools.CodeGen
         [OnOpenAsset(0)]
         public static bool OnOpen(int instanceID, int line)
         {
-            var assetPath = AssetDatabase.GetAssetPath(instanceID);
-            var asset = AssetDatabase.LoadMainAssetAtPath(assetPath);
+            var asset = EditorUtility.InstanceIDToObject(instanceID);
 
             if (asset is not CueEnumDefinition definition)
                 return false;
