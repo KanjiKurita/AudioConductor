@@ -15,7 +15,11 @@ namespace AudioConductor.Editor.Core.Tools.CueSheetEditor
         [OnOpenAsset(0)]
         public static bool OnOpen(int instanceID, int line)
         {
+#if UNITY_6000_5_OR_NEWER
+            var asset = EditorUtility.EntityIdToObject(instanceID);
+#else
             var asset = EditorUtility.InstanceIDToObject(instanceID);
+#endif
 
             if (asset is not CueSheetAsset data)
                 return false;
