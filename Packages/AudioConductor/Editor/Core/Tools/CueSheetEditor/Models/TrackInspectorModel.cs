@@ -236,8 +236,8 @@ namespace AudioConductor.Editor.Core.Tools.CueSheetEditor.Models
             set
             {
                 var actionTypeId = value == null
-                    ? $"{_tag} Unset Track {nameof(AudioClip)} {(AudioClip == null ? 0 : AudioClip.GetInstanceID())}"
-                    : $"{_tag} Set Track {nameof(AudioClip)} {value.GetInstanceID()}";
+                    ? $"{_tag} Unset Track {nameof(AudioClip)} {GetObjectIdentifier(AudioClip)}"
+                    : $"{_tag} Set Track {nameof(AudioClip)} {GetObjectIdentifier(value)}";
 
                 var old = _target.Select(track => new AudioClipAndDependencyValueBackup(track)).ToArray();
                 _history.Register(actionTypeId, Redo, Undo);
@@ -373,6 +373,18 @@ namespace AudioConductor.Editor.Core.Tools.CueSheetEditor.Models
         }
 
         public IReadOnlyObservableProperty<MixedValue<float>> VolumeRangeObservable => _volumeRange;
+
+        private static string GetObjectIdentifier(UnityEngine.Object? target)
+        {
+            if (target == null)
+                return "0";
+
+#if UNITY_6000_2_OR_NEWER
+            return target.GetEntityId().ToString();
+#else
+            return target.GetInstanceID().ToString();
+#endif
+        }
 
         #endregion
 
